@@ -7,6 +7,7 @@ const upload = require(__dirname + '/modules/upload-images');
 const app = express();
 
 app.set("view engine", "ejs");
+app.set('case sensitive routing', true); // 區分大小寫
 
 // Top-level middlewares
 app.use(express.urlencoded({extended: false}));
@@ -38,6 +39,29 @@ app.post('/try-upload', upload.single('avatar'), (req, res)=>{
 app.post('/try-uploads', upload.array('photos'), (req, res)=>{
     res.json(req.files);
 });
+
+
+app.get('/try-params1/:action/:id', (req, res)=>{
+    res.json({code:2, params: req.params});
+})
+app.get('/try-params1/:action', (req, res)=>{
+    res.json({code:3, params: req.params});
+})
+app.get('/try-params1/:action?/:id?', (req, res)=>{
+    res.json({code:1, params: req.params});
+});
+
+app.get(/^\/hi\/?/i, (req, res)=>{
+    res.send({url: req.url});
+});
+app.get(['/aaa', '/bbb'], (req, res)=>{
+    res.send({url: req.url, code:'array'});
+});
+
+const adminsRouter = require(__dirname + '/routes/admins');
+// prefix 前綴路徑
+app.use('/admins', adminsRouter);
+app.use(adminsRouter);
 
 
 app.get("/", (req, res) => {
