@@ -1,7 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const multer = require('multer');
-const upload = multer({dest: 'tmp-uploads'});
+// const upload = multer({dest: 'tmp-uploads'});
+const upload = require(__dirname + '/modules/upload-images');
 
 const app = express();
 
@@ -33,12 +34,11 @@ app.route('/try-post-form')
 app.post('/try-upload', upload.single('avatar'), (req, res)=>{
     res.json(req.file);
 });
-/*
-app.get('/try-post-form', (req, res)=>{
+
+app.post('/try-uploads', upload.array('photos'), (req, res)=>{
+    res.json(req.files);
 });
-app.post('/try-post-form', (req, res)=>{
-});
-*/
+
 
 app.get("/", (req, res) => {
     res.render("main", { name: "Shinder" });
