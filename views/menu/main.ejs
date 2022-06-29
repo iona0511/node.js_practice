@@ -2,22 +2,24 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-3">
-                        <form class="d-flex">
-                            <input
-                                class="form-control me-2"
-                                type="search"
-                                placeholder="Search"
-                                name="search"
-                               value="<%= locals.query && query.search ? query.search : '' %>"
-                            />
-                            <button class="btn btn-outline-success" type="submit">
-                                Search
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                <div class="row">
+        <div class="col">
+            <form class="d-flex">
+                <input class="form-control" type="date" name="beginDate" 
+                value="<%= query.beginDate ? query.beginDate : '' %>" >
+                <input class="form-control" type="date" name="endDate" 
+                value="<%= query.endDate ? query.endDate : '' %>" >
+                <input
+                    class="form-control me-2"
+                    type="search"
+                    placeholder="Search"
+                    name="search"
+                    value="<%= query.search ? query.search : '' %>"
+                />
+                <button class="btn btn-outline-success" type="submit">
+                    Search
+                </button>
+            </form>
+        </div>
     </div>
     <div class="row">
         <div class="col">
@@ -28,9 +30,22 @@
                     </li>
 
                     <% for(let i=page-5; i<=page+5; i++) if(i>=1 &&
-                    i<=totalPages){ %>
+                    i<=totalPages){ 
+                        const obj = {page: i};
+                        if(query.search){
+                            obj.search = query.search;
+                        }
+                        if(query.beginDate){
+                            obj.beginDate = query.beginDate;
+                        }
+                        if(query.endDate){
+                            obj.endDate = query.endDate;
+                        }
+                        
+                        const myLink = new URLSearchParams(obj).toString();
+                        %>
                     <li class="page-item <%= page===i ? 'active' : '' %>">
-                        <a class="page-link" href="?<%= new URLSearchParams({page: i, search: query.search}).toString() %>"><%= i %></a>
+                        <a class="page-link" href="?<%= myLink %>"><%= i %></a>
                     </li>
                     <% } %>
 
@@ -41,6 +56,7 @@
             </nav>
         </div>
     </div>
+
 
     <div class="row">
         <div class="col">
