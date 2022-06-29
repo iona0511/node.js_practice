@@ -116,6 +116,10 @@ app.get('/try-session', (req, res)=>{
     });
 })
 
+
+app.use('/menu', require(__dirname + '/routes/menu'));
+
+
 app.get("/", (req, res) => {
     res.render("main", { name: "Shinder" });
 });
