@@ -74,6 +74,9 @@ const getListHandler = async (req, res)=>{
 
     return output;
 };
+router.get('/add', async (req, res)=>{
+        res.render('menu/add');
+    });
 
 router.get('/', async (req, res)=>{
     const output = await getListHandler(req, res);
