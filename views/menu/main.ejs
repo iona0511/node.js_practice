@@ -2,6 +2,24 @@
 
 <div class="container">
     <div class="row">
+        <div class="col-lg-3">
+                        <form class="d-flex">
+                            <input
+                                class="form-control me-2"
+                                type="search"
+                                placeholder="Search"
+                                name="search"
+                               value="<%= locals.query && query.search ? query.search : '' %>"
+                            />
+                            <button class="btn btn-outline-success" type="submit">
+                                Search
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+    </div>
+    <div class="row">
         <div class="col">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
@@ -12,7 +30,7 @@
                     <% for(let i=page-5; i<=page+5; i++) if(i>=1 &&
                     i<=totalPages){ %>
                     <li class="page-item <%= page===i ? 'active' : '' %>">
-                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                        <a class="page-link" href="?<%= new URLSearchParams({page: i, search: query.search}).toString() %>"><%= i %></a>
                     </li>
                     <% } %>
 
