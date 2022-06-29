@@ -1,6 +1,11 @@
 const express = require('express');
 const db = require(__dirname + '/../modules/mysql-connect');
 
+const {
+        toDateString,
+        toDatetimeString,
+    } = require(__dirname + '/../modules/date-tools');
+
 const router = express.Router(); // 建立 router 物件
 
 router.get('/', async (req, res)=>{
@@ -29,12 +34,14 @@ router.get('/', async (req, res)=>{
 
         const sql02 = `SELECT * FROM menu LIMIT ${(page-1)*output.perPage}, ${output.perPage}`;
         const [r2] = await db.query(sql02);
+        r2.forEach(el=> el.created_at = toDatetimeString(el.created_at) );
+
         output.rows = r2;
     }
 
     output = {...output, page, totalRows, totalPages};
 
-    res.json(output);
+    res.render('menu/main', output);
 });
 
 module.exports = router;

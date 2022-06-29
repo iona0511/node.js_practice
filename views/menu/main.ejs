@@ -1,0 +1,61 @@
+<%- include('../parts/html-head') %> <%- include('../parts/navbar') %>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#">Previous</a>
+                    </li>
+
+                    <% for(let i=page-5; i<=page+5; i++) if(i>=1 &&
+                    i<=totalPages){ %>
+                    <li class="page-item <%= page===i ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    </li>
+                    <% } %>
+
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">編號</th>
+                        <th scope="col">類別</th>
+                        <th scope="col">圖片</th>
+                        <th scope="col">名稱</th>
+                        <th scope="col">熱量</th>
+                        <th scope="col">價格</th>
+                        <th scope="col">營養成分</th>
+                        <th scope="col">建立日期</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(let i of rows){ %>
+                    <tr>
+                        <td><%= i.menu_sid %></td>
+                        <td><%= i.menu_categories %></td>
+                        <td><%= i.menu_photo %></td>
+                        <td><%= i.menu_name %></td>
+                        <td><%= i.menu_kcal %></td>
+                        <td><%= i.menu_price_m %></td>
+                        <td><%= i.menu_nutrition %></td>
+                        <td><%= i.created_at %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<%- include('../parts/scripts') %> <%- include('../parts/html-foot') %>
