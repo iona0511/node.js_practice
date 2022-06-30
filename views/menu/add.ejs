@@ -43,7 +43,7 @@
                         >kcal</label
                     >
                     <input
-                        type="date"
+                        type="text"
                         class="form-control"
                         name="menu_kcal"
                     />
@@ -94,13 +94,45 @@
         }
         console.log(dataObj); // 轉換成物件
 
+
         const usp = new URLSearchParams(fd);
 
+        /*
+        // 傳送 JSON
+        fetch('', {
+            method: 'POST',
+            body: JSON.stringify(dataObj),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(r=>r.json())
+        .then(obj=>{
+            console.log(obj)
+        })
+        */
+
+
+        /*
         // 轉換 urlencoded
         console.log(usp.toString());
+        fetch('', {
+            method: 'POST',
+            body: usp.toString(),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(r=>r.json())
+        .then(obj=>{
+            console.log(obj)
+        })
+        */
 
 
-        
+
+
+        // multipart-formdata
         fetch('', {
             method: 'POST',
             body: fd
@@ -109,8 +141,8 @@
         .then(obj=>{
             console.log(obj)
         })
-        
-    }
 
-</script>
-<%- include('../parts/html-foot') %>
+        }
+
+        </script>
+        <%- include('../parts/html-foot') %>
