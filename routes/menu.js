@@ -78,6 +78,33 @@ router.get('/add', async (req, res)=>{
         res.render('menu/add');
     });
 
+    router.post('/add', async (req, res)=>{
+        // const schema = Joi.object({
+        //     menu_categories: Joi.string(),
+        //     menu_photo: Joi.string(),
+        //     menu_name: Joi.string(),
+        //     menu_kcal:Joi.string(),
+        //     menu_price_m: Joi.string(),
+        //     menu_nutrition: Joi.string(),  
+        // });
+    
+        // 自訂訊息
+        // https://stackoverflow.com/questions/48720942/node-js-joi-how-to-display-a-custom-error-messages
+    
+        // console.log( schema.validate(req.body, {abortEarly: false}) );
+        const sql = "INSERT INTO `menu`(`menu_categories`, `menu_photo`, `menu_name`, `menu_kcal`, `menu_price_m`, `menu_nutrition`, `created_at`) VALUES  (?, ?, ?, ?, ?, ?, NOW())";
+        
+        const {menu_categories,menu_photo, menu_name, menu_kcal, menu_price_m, menu_nutrition} = req.body;
+        const [result] = await db.query(sql, [menu_categories,menu_photo, menu_name, menu_kcal, menu_price_m, menu_nutrition]);
+        
+        res.json(result);
+
+    
+    });
+    
+
+
+
 router.get('/', async (req, res)=>{
     const output = await getListHandler(req, res);
     switch(output.code){
@@ -95,4 +122,39 @@ router.get('/api', async (req, res)=>{
     res.json(output);
 });
 
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
 module.exports = router;
+
+
+    // const schema = Joi.object({
+    //         name: Joi.string()
+    //             .min(3)
+    //             .required()
+    //             .label('姓名必填'),
+    //         email: Joi.string()
+    //             .email()
+    //             .required(),
+    //         mobile: Joi.string(),
+    //         birthday: Joi.string(),
+    //         address: Joi.string(),
+    //     });
+    
+    //     res.json( schema.validate(req.body, {abortEarly: false}) );

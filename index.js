@@ -124,9 +124,19 @@ app.get("/", (req, res) => {
     res.render("main", { name: "Shinder" });
 });
 
+
+app.route('/login')
+    .get(async (req, res)=>{
+        res.render('login');
+    })
+    .post(async (req, res)=>{
+        res.json(req.body)
+    });
+
 // ------- static folder -----------
 app.use(express.static("public"));
 app.use("/bootstrap", express.static("node_modules/bootstrap/dist"));
+app.use("/joi", express.static("node_modules/joi/dist"));
 
 // ------- 404 -----------
 app.use((req, res) => {
