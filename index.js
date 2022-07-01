@@ -8,6 +8,7 @@ const moment = require('moment-timezone');
 const axios = require('axios');
 const bcrypt = require('bcryptjs');
 
+
 // 把session 存入SQL
 const db = require(__dirname + '/modules/mysql-connect');
 const MysqlStore = require('express-mysql-session')(session);
@@ -18,7 +19,17 @@ const app = express();
 app.set("view engine", "ejs");
 app.set('case sensitive routing', true);
 
+const corsOptions = {
+    credentials: true,
+    origin: (origin, cb)=>{
+        console.log({origin});
+        cb(null, true);
+    }
+};
+
 // Top-level middlewares
+const cors = require('cors');
+app.use(cors(corsOptions));
 app.use(session({
     saveUninitialized: false,
     resave: false,
@@ -40,6 +51,13 @@ app.use((req, res, next)=>{
 
     next();
 });
+
+
+
+
+
+
+
 app.get('/try-qs', (req, res)=>{
     res.json(req.query);
 });
