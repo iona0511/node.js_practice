@@ -4,7 +4,9 @@ const multer = require('multer');
 // const upload = multer({dest: 'tmp-uploads'});
 const upload = require(__dirname + '/modules/upload-images');
 const session = require('express-session');
-const moment = require('moment-timezone')
+const moment = require('moment-timezone');
+const axios = require('axios');
+const bcrypt = require('bcryptjs');
 
 // 把session 存入SQL
 const db = require(__dirname + '/modules/mysql-connect');
@@ -29,10 +31,15 @@ app.use(session({
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use((req, res, next)=>{
-    res.locals.shinder = '哈囉';
+    // res.locals.shinder = '哈囉';
+
+    // template helper functions
+    // res.locals.toDateString = toDateString;
+    // res.locals.toDatetimeString = toDatetimeString;
+    res.locals.session = req.session;
+
     next();
 });
-
 app.get('/try-qs', (req, res)=>{
     res.json(req.query);
 });
@@ -125,13 +132,52 @@ app.get("/", (req, res) => {
 });
 
 
+app.get('/yahoo', async (req, res)=>{
+    axios.get('https://tw.yahoo.com/')
+    .then(function (response) {
+      // handle success
+        console.log(response);
+        res.send(response.data);
+    })
+});
+
 app.route('/login')
     .get(async (req, res)=>{
         res.render('login');
     })
     .post(async (req, res)=>{
-        res.json(req.body)
+        const output = {
+            success: false,
+            error: '',
+            code: 0,
+        };
+        const sql = "SELECT * FROM admins WHERE account=?";
+        const [r1] = await db.query(sql, [req.body.account]);
+
+        if(! r1.length){
+            // 帳號錯誤
+            output.code = 401;
+            output.error = '帳密錯誤'
+            return res.json(output)
+        }
+        //const row = r1[0];
+
+        output.success = await bcrypt.compare(req.body.password, r1[0].pass_hash);
+        // console.log(await bcrypt.compare(req.body.password, r1[0].pass_hash));
+        if(! output.success){
+            // 密碼錯誤
+            output.code = 402;
+            output.error = '帳密錯誤'
+                    } else {
+                            req.session.admin = {
+                                sid: r1[0].sid,
+                                account: r1[0].account,
+                            };
+        }
+
+        res.json(output);
     });
+
 
 // ------- static folder -----------
 app.use(express.static("public"));
