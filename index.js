@@ -178,6 +178,10 @@ app.route('/login')
         res.json(output);
     });
 
+    app.get("/logout", (req, res) => {
+        delete req.session.admin;
+        res.redirect("/");
+    });
 
 // ------- static folder -----------
 app.use(express.static("public"));

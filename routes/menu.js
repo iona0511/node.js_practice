@@ -75,10 +75,16 @@ const getListHandler = async (req, res)=>{
     return output;
 };
 router.get('/add', async (req, res)=>{
+        if(! req.session.admin){
+                return res.redirect('/');
+            }
         res.render('menu/add');
     });
 
     router.post('/add', async (req, res)=>{
+        if(! req.session.admin){
+            return res.json({success: false, error: '請先登入'});
+        }
         // const schema = Joi.object({
         //     menu_categories: Joi.string(),
         //     menu_photo: Joi.string(),
@@ -101,7 +107,16 @@ router.get('/add', async (req, res)=>{
 
     
     });
-    
+
+    router.use((req, res, next)=>{
+            /*
+        +    if(! req.session.admin){
+        +        return res.redirect('/');
+        +    }
+        +    */
+            next();
+        });
+        
 
 
 
@@ -115,7 +130,12 @@ router.get('/', async (req, res)=>{
             return res.redirect(`?page=${output.totalPages}`);
             break;
     }
-    res.render('menu/main', output);
+    if(! req.session.admin){
+        res.render('menu/main-noadmin', output);
+    } else {
+        res.render('menu/main', output);
+    }
+    
 });
 router.get('/api', async (req, res)=>{
     const output = await getListHandler(req, res);
